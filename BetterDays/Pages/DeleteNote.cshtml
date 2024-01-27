@@ -1,0 +1,16 @@
+@page "{date}"
+@model BetterDays.Pages.DeleteNote
+
+@{
+    ViewData["Title"] = $"Delete Note for {Model.Date}";
+}
+
+<h2>Are you sure you want to delete the note for @Model.Date.ToString("dd MMM yyyy")?</h2>
+<form method="post">
+    <button type="submit" class="btn btn-danger">
+        Delete
+    </button>
+    <a asp-page="Index">
+        Cancel
+    </a>
+</form>

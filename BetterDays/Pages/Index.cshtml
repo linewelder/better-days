@@ -10,6 +10,7 @@
 {
     <h2>@day.Date.ToString("dd MMM yyyy")</h2>
     <p>@day.Comment</p>
+    <p><a asp-page="DeleteNote" asp-route-date="@day.Date.ToString("yyyy.MM.dd")">Delete</a></p>
     <ul>
         @foreach (var deed in day.DoneDeeds)
         {
