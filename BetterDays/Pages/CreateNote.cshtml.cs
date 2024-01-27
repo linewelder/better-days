@@ -45,7 +45,9 @@ public class CreateNote(ApplicationDbContext context) : PageModel
         {
             Date = GetPerceivedToday()
         };
-        Deeds = await context.Deeds.ToListAsync();
+        Deeds = await context.Deeds
+            .OrderBy(d => d.Name)
+            .ToListAsync();
     }
 
     public async Task<IActionResult> OnGet()
