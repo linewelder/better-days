@@ -14,23 +14,10 @@ public class CreateDeed(ApplicationDbContext context) : PageModel
     [Required, MaxLength(20)]
     public string NewDeed { get; set; } = null!;
 
-    public IActionResult OnGet()
-    {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Redirect("/Identity/Account/Login");
-        }
-
-        return Page();
-    }
+    public void OnGet() {}
 
     public async Task<IActionResult> OnPost()
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Redirect("/Identity/Account/Login");
-        }
-
         var nameTrimmed = NewDeed.Trim();
         if (await context.Deeds.AnyAsync(d => d.Name == nameTrimmed))
         {

@@ -52,22 +52,12 @@ public class CreateNote(ApplicationDbContext context) : PageModel
 
     public async Task<IActionResult> OnGet()
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Redirect("/Identity/Account/Login");
-        }
-
         await PopulatePage();
         return Page();
     }
 
     public async Task<IActionResult> OnPost()
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Redirect("/Identity/Account/Login");
-        }
-
         var date = NewNote.Date;
         if (await context.DailyNotes.AnyAsync(dn => dn.Date == date))
         {

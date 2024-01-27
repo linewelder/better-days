@@ -33,11 +33,6 @@ public class Index(ApplicationDbContext context) : PageModel
 
     public async Task<IActionResult> OnGet()
     {
-        if (!User.Identity?.IsAuthenticated ?? false)
-        {
-            return Redirect("/Identity/Account/Login");
-        }
-
         await PopulatePage();
         return Page();
     }
