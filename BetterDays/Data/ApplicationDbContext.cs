@@ -1,12 +1,21 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using BetterDays.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BetterDays.Data;
 
-public class ApplicationDbContext : IdentityDbContext
+public class ApplicationDbContext(
+    DbContextOptions<ApplicationDbContext> options) : IdentityDbContext(options)
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
+    public required DbSet<DailyNote> DailyNotes { get; init; }
+    public required DbSet<Deed> Deeds { get; init; }
+    public required DbSet<DoneDeed> DoneDeeds { get; init; }
+
+    protected override void OnModelCreating(ModelBuilder builder)
     {
+        base.OnModelCreating(builder);
+
+        builder.Entity<DoneDeed>()
+            .HasKey(dd => new { dd.DailyNoteDate, dd.DeedId });
     }
 }
