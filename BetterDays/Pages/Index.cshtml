@@ -8,6 +8,12 @@
     <div asp-validation-summary="All" class="text-danger"></div>
 
     <div class="form-group mb-3">
+        <label asp-for="NewNote.Date" class="control-label"></label>
+        <input asp-for="NewNote.Date" type="date" class="form-control" />
+        <span asp-validation-for="NewNote.Date" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
         <label asp-for="NewNote.Comment" class="control-label"></label>
         <textarea asp-for="NewNote.Comment" class="form-control"></textarea>
         <span asp-validation-for="NewNote.Comment" class="text-danger"></span>

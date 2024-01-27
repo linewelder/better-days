@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using BetterDays.Data;
 using BetterDays.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,9 @@ public class Index(ApplicationDbContext context) : PageModel
 {
     public class NewDailyNote
     {
+        [Required]
+        public DateOnly Date { get; init; }
+
         public string? Comment { get; init; }
 
         [DisplayName("Deeds Done")]
@@ -33,6 +37,10 @@ public class Index(ApplicationDbContext context) : PageModel
 
     private async Task PopulatePage()
     {
+        NewNote = new NewDailyNote
+        {
+            Date = DateOnly.FromDateTime(DateTime.Today)
+        };
         Deeds = await context.Deeds.ToListAsync();
 
         Items = await context.DailyNotes
@@ -66,7 +74,7 @@ public class Index(ApplicationDbContext context) : PageModel
             return Redirect("/Identity/Account/Login");
         }
 
-        var date = DateOnly.FromDateTime(DateTime.Today);
+        var date = NewNote.Date;
         if (await context.DailyNotes.AnyAsync(dn => dn.Date == date))
         {
             ModelState.AddModelError("", "There already is a note for today");
