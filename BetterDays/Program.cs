@@ -22,7 +22,16 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await dbContext.Database.MigrateAsync();
+    if (app.Environment.IsDevelopment())
+    {
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+        await dbContext.Database.EnsureCreatedAsync();
+        await DbSeeder.SeedData(dbContext, userManager);
+    }
+    else
+    {
+        await dbContext.Database.MigrateAsync();
+    }
 }
 
 // Configure the HTTP request pipeline.
