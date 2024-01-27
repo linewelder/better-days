@@ -1,20 +1,33 @@
 @page
 @model BetterDays.Pages.Index
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "History";
 }
 
-<a asp-page="CreateNote">New Note</a>
+<p>
+    <a asp-page="CreateNote">New Note</a>
+</p>
 
 @foreach (var day in Model.Items)
 {
-    <h2>@day.Date.ToString("dd MMM yyyy")</h2>
-    <p>@day.Comment</p>
-    <p><a asp-page="DeleteNote" asp-route-date="@day.Date.ToString("yyyy.MM.dd")">Delete</a></p>
-    <ul>
-        @foreach (var deed in day.DoneDeeds)
-        {
-            <li>@deed</li>
-        }
-    </ul>
+    <div class="card mb-3">
+        <div class="card-body">
+            <h2>@day.Date.ToString("dd MMM yyyy")</h2>
+            @if (day.Comment is not null)
+            {
+                <p>@day.Comment</p>
+            }
+            <ul>
+                @foreach (var deed in day.DoneDeeds)
+                {
+                    <li>@deed</li>
+                }
+            </ul>
+        </div>
+        <div class="card-footer">
+            <a asp-page="DeleteNote" asp-route-date="@day.Date.ToString("yyyy.MM.dd")">
+                Delete
+            </a>
+        </div>
+    </div>
 }
