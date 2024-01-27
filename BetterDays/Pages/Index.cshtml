@@ -4,35 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<form method="post" class="mb-4">
-    <div asp-validation-summary="All" class="text-danger"></div>
-
-    <div class="form-group mb-3">
-        <label asp-for="NewNote.Date" class="control-label"></label>
-        <input asp-for="NewNote.Date" type="date" class="form-control" />
-        <span asp-validation-for="NewNote.Date" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mb-3">
-        <label asp-for="NewNote.Comment" class="control-label"></label>
-        <textarea asp-for="NewNote.Comment" class="form-control"></textarea>
-        <span asp-validation-for="NewNote.Comment" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mb-3">
-        <label asp-for="NewNote.DoneDeedIds" class="control-label"></label>
-        <a asp-page="CreateDeed">Add New</a>
-        <select asp-for="NewNote.DoneDeedIds" multiple class="form-select">
-            @foreach (var deed in Model.Deeds)
-            {
-                <option value=@deed.Id>@deed.Name</option>
-            }
-        </select>
-        <span asp-validation-for="NewNote.DoneDeedIds" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Add Note</button>
-</form>
+<a asp-page="CreateNote">New Note</a>
 
 @foreach (var day in Model.Items)
 {
