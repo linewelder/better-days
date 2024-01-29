@@ -41,6 +41,6 @@ public class CreateDeed(ApplicationDbContext context) : PageModel
         context.Deeds.Add(newDeed);
         await context.SaveChangesAsync();
 
-        return RedirectToPage(nameof(Index));
+        return RedirectToPage(nameof(CreateNote));
     }
 }
