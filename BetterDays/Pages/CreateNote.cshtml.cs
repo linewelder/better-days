@@ -18,6 +18,10 @@ public class CreateNote(ApplicationDbContext context) : PageModel
         [StringLength(255)]
         public string? Comment { get; init; }
 
+        public int Productivity { get; init; }
+
+        public int Mood { get; init; }
+
         [DisplayName("Deeds Done")]
         public List<int>? DoneDeedIds { get; init; }
     }
@@ -75,6 +79,8 @@ public class CreateNote(ApplicationDbContext context) : PageModel
         {
             Date = date,
             Comment = NewNote.Comment?.Trim(),
+            Productivity = NewNote.Productivity,
+            Mood = NewNote.Mood,
             Deeds = NewNote.DoneDeedIds?
                 .Select(id => new DoneDeed
                 {
