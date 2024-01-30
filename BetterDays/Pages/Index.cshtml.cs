@@ -10,6 +10,8 @@ public class Index(ApplicationDbContext context) : PageModel
     public class HistoryItem
     {
         public DateOnly Date { get; init; }
+        public int Productivity { get; init; }
+        public int Mood { get; init; }
         public string? Comment { get; init; }
         public required List<string> DoneDeeds { get; init; }
     }
@@ -24,6 +26,8 @@ public class Index(ApplicationDbContext context) : PageModel
             .Select(day => new HistoryItem
             {
                 Date = day.Date,
+                Productivity = day.Productivity,
+                Mood = day.Mood,
                 Comment = day.Comment,
                 DoneDeeds = day.Deeds!.Select(dd => dd.Deed!.Name).ToList()
             })
