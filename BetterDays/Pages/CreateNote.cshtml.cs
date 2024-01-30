@@ -15,6 +15,7 @@ public class CreateNote(ApplicationDbContext context) : PageModel
         [Required]
         public DateOnly Date { get; init; }
 
+        [StringLength(255)]
         public string? Comment { get; init; }
 
         [DisplayName("Deeds Done")]
