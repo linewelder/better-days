@@ -39,6 +39,8 @@ public static class DbSeeder
         context.DailyNotes.Add(new DailyNote
         {
             Date = new DateOnly(2024, 1, 24),
+            Productivity = 1,
+            Mood = 2,
             Deeds = new List<DoneDeed>
             {
                 new() { DeedId = 2 }
@@ -48,6 +50,8 @@ public static class DbSeeder
         context.DailyNotes.Add(new DailyNote
         {
             Date = new DateOnly(2024, 1, 25),
+            Productivity = 4,
+            Mood = 5,
             Deeds = new List<DoneDeed>
             {
                 new() { DeedId = 1 },
@@ -59,6 +63,8 @@ public static class DbSeeder
         {
             Date = new DateOnly(2024, 1, 27),
             Comment = "This is a test comment",
+            Productivity = 3,
+            Mood = 4,
             Deeds = new List<DoneDeed>
             {
                 new() { DeedId = 1 },
