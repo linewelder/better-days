@@ -29,9 +29,22 @@
             </ul>
         </div>
         <div class="card-footer">
-            <a asp-page="DeleteNote" asp-route-date="@day.Date.ToString("yyyy.MM.dd")">
-                Delete
-            </a>
+            <div class="row justify-content-end g-3">
+                @{
+                    var encodedDate = day.Date.ToString("yyyy-MM-dd");
+                }
+
+                <div class="col-auto">
+                    <a asp-page="EditNote" asp-route-date="@encodedDate">
+                        Edit
+                    </a>
+                </div>
+                <div class="col-auto">
+                    <a asp-page="DeleteNote" asp-route-date="@encodedDate">
+                        Delete
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 }
