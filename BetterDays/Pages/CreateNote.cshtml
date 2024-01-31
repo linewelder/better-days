@@ -30,12 +30,22 @@
     <div class="row mb-3">
         <div class="col-md form-group">
             <label asp-for="NewNote.Productivity" class="control-label"></label>
-            <input asp-for="NewNote.Productivity" type="number" class="form-control" />
+            <select asp-for="NewNote.Productivity" class="form-select">
+                @foreach (var i in Enumerable.Range(1, 5))
+                {
+                    <option>@i</option>
+                }
+            </select>
             <span asp-validation-for="NewNote.Productivity" class="text-danger"></span>
         </div>
         <div class="col-md form-group">
             <label asp-for="NewNote.Mood" class="control-label"></label>
-            <input asp-for="NewNote.Mood" type="number" class="form-control" />
+            <select asp-for="NewNote.Mood" class="form-select">
+                @foreach (var i in Enumerable.Range(1, 5))
+                {
+                    <option>@i</option>
+                }
+            </select>
             <span asp-validation-for="NewNote.Mood" class="text-danger"></span>
         </div>
     </div>
