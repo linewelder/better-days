@@ -1,4 +1,5 @@
 @page
+@using System.Text
 @model BetterDays.Pages.Index
 @{
     ViewData["Title"] = "History";
@@ -12,11 +13,15 @@
 {
     <div class="card mb-3">
         <div class="card-body">
-            <h2>@day.Date.ToString("dd MMM yyyy")</h2>
-            <p>
-                Productivity: @day.Productivity/5<br/>
-                Mood: @day.Mood/5
-            </p>
+            <h2>@day.Date.ToString("dd MMMM yyyy")</h2>
+            <div>
+                <div class="metric-label">@Html.DisplayNameFor(_ => day.Productivity):</div>
+                <div class="d-inline">@DisplayStars(day.Productivity, 5)</div>
+            </div>
+            <div class="mb-3">
+                <div class="metric-label">@Html.DisplayNameFor(_ => day.Mood):</div>
+                <div class="d-inline">@DisplayStars(day.Mood, 5)</div>
+            </div>
             @if (day.Comment is not null)
             {
                 <p>@day.Comment</p>
@@ -47,4 +52,13 @@
             </div>
         </div>
     </div>
+}
+
+@functions
+{
+    private static string DisplayStars(int number, int outOf) =>
+        new StringBuilder(outOf)
+            .Insert(0, "\u2605", number)
+            .Insert(number, "\u2606", outOf - number)
+            .ToString();
 }
