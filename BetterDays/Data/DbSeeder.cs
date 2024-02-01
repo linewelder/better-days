@@ -13,16 +13,32 @@ public static class DbSeeder
             return;
         }
 
-        var result = await userManager.CreateAsync(new IdentityUser
+        // Create Users
+
+        var testUser = new IdentityUser
         {
             Email = "test@better-days",
             UserName = "test@better-days",
             EmailConfirmed = true
-        }, "Pa$$w0rd");
-        if (!result.Succeeded)
+        };
+
+        var anotherUser = new IdentityUser
         {
-            throw new Exception(result.ToString());
+            Email = "new@better-days",
+            UserName = "new@better-days",
+            EmailConfirmed = true
+        };
+
+        foreach (var user in new[] { testUser, anotherUser })
+        {
+            var result = await userManager.CreateAsync(user, "Pa$$w0rd");
+            if (!result.Succeeded)
+            {
+                throw new Exception(result.ToString());
+            }
         }
+
+        // Create Deeds
 
         context.Deeds.Add(new Deed
         {
@@ -36,8 +52,12 @@ public static class DbSeeder
             Name = "Vacuum"
         });
 
+        // Create Notes
+
         context.DailyNotes.Add(new DailyNote
         {
+            Id = 1,
+            UserId = testUser.Id,
             Date = new DateOnly(2024, 1, 24),
             Productivity = 1,
             Mood = 2,
@@ -49,6 +69,8 @@ public static class DbSeeder
 
         context.DailyNotes.Add(new DailyNote
         {
+            Id = 2,
+            UserId = testUser.Id,
             Date = new DateOnly(2024, 1, 25),
             Productivity = 4,
             Mood = 5,
@@ -61,6 +83,8 @@ public static class DbSeeder
 
         context.DailyNotes.Add(new DailyNote
         {
+            Id = 3,
+            UserId = testUser.Id,
             Date = new DateOnly(2024, 1, 27),
             Comment = "This is a test comment",
             Productivity = 3,

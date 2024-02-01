@@ -2,13 +2,14 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using BetterDays.Data;
 using BetterDays.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace BetterDays.Pages;
 
-public class EditNote(ApplicationDbContext context) : PageModel
+public class EditNote(ApplicationDbContext context, UserManager<IdentityUser> userManager) : PageModel
 {
     public class EditedDailyNote
     {
@@ -75,9 +76,10 @@ public class EditNote(ApplicationDbContext context) : PageModel
         }
         Date = parsedDate;
 
+        var userId = userManager.GetUserId(User);
         var note = await context.DailyNotes
             .Include(dn => dn.Deeds)
-            .FirstOrDefaultAsync(dn => dn.Date == Date);
+            .FirstOrDefaultAsync(dn => dn.UserId == userId && dn.Date == Date);
         if (note is null)
         {
             return NotFound();

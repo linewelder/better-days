@@ -1,11 +1,12 @@
 using BetterDays.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace BetterDays.Pages;
 
-public class Index(ApplicationDbContext context) : PageModel
+public class Index(ApplicationDbContext context, UserManager<IdentityUser> userManager) : PageModel
 {
     public class HistoryItem
     {
@@ -20,9 +21,12 @@ public class Index(ApplicationDbContext context) : PageModel
 
     private async Task PopulatePage()
     {
+        var userId = userManager.GetUserId(User)!;
+
         Items = await context.DailyNotes
             .Include(day => day.Deeds!)
             .ThenInclude(dd => dd.Deed)
+            .Where(day => day.UserId == userId)
             .Select(day => new HistoryItem
             {
                 Date = day.Date,

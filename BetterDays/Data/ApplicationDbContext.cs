@@ -15,7 +15,11 @@ public class ApplicationDbContext(
     {
         base.OnModelCreating(builder);
 
+        builder.Entity<DailyNote>()
+            .HasIndex(dn => new { dn.UserId, dn.Date })
+            .IsUnique();
+
         builder.Entity<DoneDeed>()
-            .HasKey(dd => new { dd.DailyNoteDate, dd.DeedId });
+            .HasKey(dd => new { dd.DailyNoteId, dd.DeedId });
     }
 }

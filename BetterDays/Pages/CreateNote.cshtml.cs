@@ -5,10 +5,11 @@ using BetterDays.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace BetterDays.Pages;
 
-public class CreateNote(ApplicationDbContext context) : PageModel
+public class CreateNote(ApplicationDbContext context, UserManager<IdentityUser> userManager) : PageModel
 {
     public class NewDailyNote
     {
@@ -63,8 +64,9 @@ public class CreateNote(ApplicationDbContext context) : PageModel
 
     public async Task<IActionResult> OnPost()
     {
+        var userId = userManager.GetUserId(User)!;
         var date = NewNote.Date;
-        if (await context.DailyNotes.AnyAsync(dn => dn.Date == date))
+        if (await context.DailyNotes.AnyAsync(dn => dn.UserId == userId &&  dn.Date == date))
         {
             ModelState.AddModelError("", "There already is a note for today");
         }
@@ -77,16 +79,13 @@ public class CreateNote(ApplicationDbContext context) : PageModel
 
         var newNote = new DailyNote
         {
+            UserId = userId,
             Date = date,
             Comment = NewNote.Comment?.Trim(),
             Productivity = NewNote.Productivity,
             Mood = NewNote.Mood,
             Deeds = NewNote.DoneDeedIds?
-                .Select(id => new DoneDeed
-                {
-                    DailyNoteDate = date,
-                    DeedId = id
-                })
+                .Select(id => new DoneDeed { DeedId = id })
                 .ToList()
         };
         if (!TryValidateModel(newNote))

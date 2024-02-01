@@ -1,8 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace BetterDays.Models;
 
 public class DoneDeed
 {
-    public DateOnly DailyNoteDate { get; set; }
+    public int DailyNoteId { get; set; }
 
     public int DeedId { get; set; }
 

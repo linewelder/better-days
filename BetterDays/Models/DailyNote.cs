@@ -5,6 +5,11 @@ namespace BetterDays.Models;
 public class DailyNote
 {
     [Key]
+    public int Id { get; set; }
+
+    [StringLength(36)]
+    public required string UserId { get; set; }
+
     public DateOnly Date { get; set; }
 
     [MaxLength(255)]

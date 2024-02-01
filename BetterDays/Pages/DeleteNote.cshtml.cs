@@ -1,10 +1,12 @@
 using BetterDays.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetterDays.Pages;
 
-public class DeleteNote(ApplicationDbContext context) : PageModel
+public class DeleteNote(ApplicationDbContext context, UserManager<IdentityUser> userManager) : PageModel
 {
     public DateOnly Date { get; set; }
 
@@ -28,7 +30,9 @@ public class DeleteNote(ApplicationDbContext context) : PageModel
         }
         Date = parsedDate;
 
-        var note = await context.DailyNotes.FindAsync(Date);
+        var userId = userManager.GetUserId(User);
+        var note = await context.DailyNotes.FirstOrDefaultAsync(
+            dn => dn.UserId == userId && dn.Date == Date);
         if (note is null)
         {
             return NotFound();
