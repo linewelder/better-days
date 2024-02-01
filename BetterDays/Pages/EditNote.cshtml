@@ -1,7 +1,7 @@
 @page "{date}"
 @model BetterDays.Pages.EditNote
 @{
-    ViewData["Title"] = $"Edit Note for {Model.Date}";
+    ViewData["Title"] = $"Edit Note for {Model.Date.ToString("d MMMM yyyy")}";
 }
 
 <h2>@ViewData["Title"]</h2>
