@@ -58,3 +58,29 @@
 
     <button type="submit" class="btn btn-primary">Add Note</button>
 </form>
+
+<script>
+    function getLocalDate(date) {
+        const year = date.getFullYear();
+        const month = ('0' + (date.getMonth() + 1)).slice(-2);
+        const day = ('0' + date.getDate()).slice(-2);
+        return `${year}-${month}-${day}`;
+    }
+
+    /**
+     * If it is after midnight, the note is most likely to be
+     * about the day that has just ended.
+     */
+    function getPerceivedToday() {
+        const today = new Date();
+        const stillNotSleeping = today.getHours() < 10;
+        if (stillNotSleeping) {
+            today.setDate(today.getDate() - 1);
+        }
+
+        return today;
+    }
+
+    const dateInput = document.getElementById('NewNote_Date');
+    dateInput.value = getLocalDate(getPerceivedToday());
+</script>

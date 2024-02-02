@@ -32,25 +32,9 @@ public class CreateNote(ApplicationDbContext context, UserManager<IdentityUser> 
 
     public List<Deed> Deeds { get; set; } = null!;
 
-    /**
-     * If it is after midnight, the note is most likely to be
-     * about the day that has just ended.
-     */
-    private static DateOnly GetPerceivedToday()
-    {
-        var now = DateTime.Now;
-        var stillNotSleeping = now.Hour < 10;
-        return stillNotSleeping
-            ? DateOnly.FromDateTime(now - TimeSpan.FromDays(1))
-            : DateOnly.FromDateTime(now);
-    }
-
     public async Task PopulatePage()
     {
-        NewNote = new NewDailyNote
-        {
-            Date = GetPerceivedToday()
-        };
+        NewNote = new NewDailyNote();
         Deeds = await context.Deeds
             .OrderBy(d => d.Name)
             .ToListAsync();
