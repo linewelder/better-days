@@ -73,7 +73,7 @@
      */
     function getPerceivedToday() {
         const today = new Date();
-        const stillNotSleeping = today.getHours() < 10;
+        const stillNotSleeping = today.getHours() < @Utils.PerceivedDayBoundary;
         if (stillNotSleeping) {
             today.setDate(today.getDate() - 1);
         }
