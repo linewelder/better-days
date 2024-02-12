@@ -1,5 +1,6 @@
 ﻿using BetterDays.Models;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,9 +19,15 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         base.OnModelCreating(builder);
 
-        builder.Entity<DailyNote>()
-            .HasIndex(dn => new { dn.UserId, dn.Date })
-            .IsUnique();
+        builder.Entity<DailyNote>(dailyNote =>
+        {
+            dailyNote.HasIndex(dn => new { dn.UserId, dn.Date })
+                .IsUnique();
+
+            dailyNote.HasOne<IdentityUser>()
+                .WithMany()
+                .HasForeignKey(dn => dn.UserId);
+        });
 
         builder.Entity<DoneDeed>()
             .HasKey(dd => new { dd.DailyNoteId, dd.DeedId });
