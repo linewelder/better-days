@@ -54,46 +54,43 @@ public static class DbSeeder
 
         // Create Notes
 
-        context.DailyNotes.Add(new DailyNote
-        {
-            Id = 1,
-            UserId = testUser.Id,
-            Date = new DateOnly(2024, 1, 24),
-            Productivity = 1,
-            Mood = 2,
-            Deeds = new List<DoneDeed>
-            {
-                new() { DeedId = 2 }
-            }
-        });
+        string?[] comments =
+        [
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
+            "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            "Ut enim ad minim veniam, quis nostrud exercitation ullamco " +
+            "laboris nisi ut aliquip ex ea commodo consequat.",
+            null,
+            "Duis aute irure dolor in reprehenderit in voluptate velit esse " +
+            "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat " +
+            "cupidatat non proident, sunt in culpa qui officia deserunt " +
+            "mollit anim id est laborum."
+        ];
 
-        context.DailyNotes.Add(new DailyNote
+        var startingDate = new DateOnly(2024, 1, 24);
+        for (var i = 0; i < 10; i++)
         {
-            Id = 2,
-            UserId = testUser.Id,
-            Date = new DateOnly(2024, 1, 25),
-            Productivity = 4,
-            Mood = 5,
-            Deeds = new List<DoneDeed>
+            var deeds = new List<DoneDeed>();
+            if (i % 2 == 0)
             {
-                new() { DeedId = 1 },
-                new() { DeedId = 2 }
+                deeds.Add(new DoneDeed { DeedId = 1 });
             }
-        });
+            if (i % 4 > 2)
+            {
+                deeds.Add(new DoneDeed { DeedId = 2 });
+            }
 
-        context.DailyNotes.Add(new DailyNote
-        {
-            Id = 3,
-            UserId = testUser.Id,
-            Date = new DateOnly(2024, 1, 27),
-            Comment = "This is a test comment",
-            Productivity = 3,
-            Mood = 4,
-            Deeds = new List<DoneDeed>
+            context.DailyNotes.Add(new DailyNote
             {
-                new() { DeedId = 1 },
-            }
-        });
+                Id = i + 1,
+                UserId = testUser.Id,
+                Date = startingDate.AddDays(i),
+                Comment = comments[i % comments.Length],
+                Productivity = i % 5,
+                Mood = (i + 1) % 5,
+                Deeds = deeds
+            });
+        }
 
         await context.SaveChangesAsync();
     }
