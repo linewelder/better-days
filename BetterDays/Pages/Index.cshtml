@@ -17,58 +17,65 @@
     </p>
 </div>
 
-<partial model="Model" name="Shared/_PaginationPartial"/>
-
-@foreach (var day in Model.Items)
+@if (Model.Items.Count > 0)
 {
-    var isWeekend = day.Date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday;
+    <partial model="Model" name="Shared/_PaginationPartial"/>
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <h2 class=@(isWeekend ? "text-danger" : "")>
-                @day.Date.ToString("dddd, d MMM yyyy")
-            </h2>
-            <div>
-                <div class="metric-label">@Html.DisplayNameFor(_ => day.Productivity):</div>
-                <div class="d-inline">@DisplayStars(day.Productivity, 5)</div>
-            </div>
-            <div class="mb-3">
-                <div class="metric-label">@Html.DisplayNameFor(_ => day.Mood):</div>
-                <div class="d-inline">@DisplayStars(day.Mood, 5)</div>
-            </div>
-            @if (day.Comment is not null)
-            {
-                <p>@day.Comment</p>
-            }
-            <ul>
-                @foreach (var deed in day.DoneDeeds)
+    @foreach (var day in Model.Items)
+    {
+        var isWeekend = day.Date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday;
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h2 class=@(isWeekend ? "text-danger" : "")>
+                    @day.Date.ToString("dddd, d MMM yyyy")
+                </h2>
+                <div>
+                    <div class="metric-label">@Html.DisplayNameFor(_ => day.Productivity):</div>
+                    <div class="d-inline">@DisplayStars(day.Productivity, 5)</div>
+                </div>
+                <div class="mb-3">
+                    <div class="metric-label">@Html.DisplayNameFor(_ => day.Mood):</div>
+                    <div class="d-inline">@DisplayStars(day.Mood, 5)</div>
+                </div>
+                @if (day.Comment is not null)
                 {
-                    <li>@deed</li>
+                    <p>@day.Comment</p>
                 }
-            </ul>
-        </div>
-        <div class="card-footer">
-            <div class="row justify-content-end g-3">
-                @{
-                    var encodedDate = day.Date.ToString("yyyy-MM-dd");
-                }
+                <ul>
+                    @foreach (var deed in day.DoneDeeds)
+                    {
+                        <li>@deed</li>
+                    }
+                </ul>
+            </div>
+            <div class="card-footer">
+                <div class="row justify-content-end g-3">
+                    @{
+                        var encodedDate = day.Date.ToString("yyyy-MM-dd");
+                    }
 
-                <div class="col-auto">
-                    <a asp-page="EditNote" asp-route-date="@encodedDate">
-                        Edit
-                    </a>
-                </div>
-                <div class="col-auto">
-                    <a asp-page="DeleteNote" asp-route-date="@encodedDate">
-                        Delete
-                    </a>
+                    <div class="col-auto">
+                        <a asp-page="EditNote" asp-route-date="@encodedDate">
+                            Edit
+                        </a>
+                    </div>
+                    <div class="col-auto">
+                        <a asp-page="DeleteNote" asp-route-date="@encodedDate">
+                            Delete
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-}
+    }
 
-<partial model="Model" name="Shared/_PaginationPartial"/>
+    <partial model="Model" name="Shared/_PaginationPartial"/>
+}
+else
+{
+    <p class="lead text-center">Nothing Here Yet</p>
+}
 
 @functions
 {
