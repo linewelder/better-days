@@ -49,6 +49,24 @@ public class CreateNote(ApplicationDbContext context, UserManager<IdentityUser> 
         return Page();
     }
 
+    private async Task<bool> CheckDeedsAsync(DailyNote note)
+    {
+        foreach (var doneDeed in note.Deeds!)
+        {
+            var deed = await context.Deeds.FindAsync(doneDeed.DeedId);
+            if (deed is not null && deed.UserId == note.UserId)
+            {
+                continue;
+            }
+
+            ModelState.AddModelError(
+                "Note.DoneDeedIds", $"Deed with ID {doneDeed.DeedId} does not belong to the user");
+            return false;
+        }
+
+        return true;
+    }
+
     public async Task<IActionResult> OnPost()
     {
         var userId = userManager.GetUserId(User)!;
@@ -76,6 +94,12 @@ public class CreateNote(ApplicationDbContext context, UserManager<IdentityUser> 
                 .ToList()
         };
         if (!TryValidateModel(newNote))
+        {
+            await PopulatePage();
+            return Page();
+        }
+
+        if (!await CheckDeedsAsync(newNote))
         {
             await PopulatePage();
             return Page();
