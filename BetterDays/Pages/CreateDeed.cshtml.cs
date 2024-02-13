@@ -2,13 +2,14 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using BetterDays.Data;
 using BetterDays.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace BetterDays.Pages;
 
-public class CreateDeed(ApplicationDbContext context) : PageModel
+public class CreateDeed(ApplicationDbContext context, UserManager<IdentityUser> userManager) : PageModel
 {
     [BindProperty, DisplayName("Name")]
     [Required, MaxLength(20)]
@@ -18,6 +19,8 @@ public class CreateDeed(ApplicationDbContext context) : PageModel
 
     public async Task<IActionResult> OnPost()
     {
+        var userId = userManager.GetUserId(User)!;
+
         var nameTrimmed = NewDeed.Trim();
         if (await context.Deeds.AnyAsync(d => d.Name == nameTrimmed))
         {
@@ -31,7 +34,8 @@ public class CreateDeed(ApplicationDbContext context) : PageModel
 
         var newDeed = new Deed
         {
-            Name = nameTrimmed
+            Name = nameTrimmed,
+            UserId = userId
         };
         if (!TryValidateModel(newDeed))
         {

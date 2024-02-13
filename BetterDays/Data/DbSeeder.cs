@@ -43,12 +43,14 @@ public static class DbSeeder
         context.Deeds.Add(new Deed
         {
             Id = 1,
+            UserId = testUser.Id,
             Name = "Dishes"
         });
 
         context.Deeds.Add(new Deed
         {
             Id = 2,
+            UserId = testUser.Id,
             Name = "Vacuum"
         });
 

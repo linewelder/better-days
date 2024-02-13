@@ -31,5 +31,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         builder.Entity<DoneDeed>()
             .HasKey(dd => new { dd.DailyNoteId, dd.DeedId });
+
+        builder.Entity<Deed>()
+            .HasOne<IdentityUser>()
+            .WithMany()
+            .HasForeignKey(d => d.UserId);
     }
 }
