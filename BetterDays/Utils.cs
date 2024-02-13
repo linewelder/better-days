@@ -5,7 +5,7 @@ public static class Utils
     /**
      * The hour at which the next day starts.
      */
-    public const int PerceivedDayBoundary = 10;
+    public const int PerceivedDayBoundary = 6;
 
     /**
      * If it is after midnight, the note is most likely to be
