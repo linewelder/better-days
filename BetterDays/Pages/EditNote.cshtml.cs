@@ -33,7 +33,10 @@ public class EditNote(ApplicationDbContext context, UserManager<IdentityUser> us
 
     public async Task PopulatePage()
     {
+        var userId = userManager.GetUserId(User)!;
+
         Deeds = await context.Deeds
+            .Where(d => d.UserId == userId)
             .OrderBy(d => d.Name)
             .ToListAsync();
     }

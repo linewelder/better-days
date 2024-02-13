@@ -34,8 +34,11 @@ public class CreateNote(ApplicationDbContext context, UserManager<IdentityUser> 
 
     public async Task PopulatePage()
     {
+        var userId = userManager.GetUserId(User)!;
+
         NewNote = new NewDailyNote();
         Deeds = await context.Deeds
+            .Where(d => d.UserId == userId)
             .OrderBy(d => d.Name)
             .ToListAsync();
     }
