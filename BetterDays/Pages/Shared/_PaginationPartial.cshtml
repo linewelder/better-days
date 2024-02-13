@@ -1,0 +1,13 @@
+<p class="text-center">
+    <a class="btn btn-primary @(Model.CurrentPage > 1 ? null : "disabled")"
+       asp-route-currentPage="@(Model.CurrentPage - 1)">
+        &lt;
+    </a>
+
+    Page @Model.CurrentPage out of @Model.TotalPages
+
+    <a class="btn btn-primary @(Model.CurrentPage < Model.TotalPages ? null : "disabled")"
+       asp-route-currentPage="@(Model.CurrentPage + 1)">
+        &gt;
+    </a>
+</p>

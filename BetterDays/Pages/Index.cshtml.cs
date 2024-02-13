@@ -19,29 +19,37 @@ public class Index(ApplicationDbContext context, UserManager<IdentityUser> userM
 
     public List<HistoryItem> Items { get; private set; } = null!;
 
-    private async Task PopulatePage()
+    public const int NotesPerPage = 7;
+
+    [BindProperty(SupportsGet = true)]
+    public int CurrentPage { get; set; } = 1;
+
+    public int TotalPages { get; private set; }
+
+    public async Task<IActionResult> OnGet()
     {
         var userId = userManager.GetUserId(User)!;
 
-        Items = await context.DailyNotes
-            .Include(day => day.Deeds!)
-            .ThenInclude(dd => dd.Deed)
-            .Where(day => day.UserId == userId)
-            .Select(day => new HistoryItem
+        var allNotes =
+            from day in context.DailyNotes
+            where day.UserId == userId
+            orderby day.Date descending
+            select new HistoryItem
             {
                 Date = day.Date,
                 Productivity = day.Productivity,
                 Mood = day.Mood,
                 Comment = day.Comment,
                 DoneDeeds = day.Deeds!.Select(dd => dd.Deed!.Name).ToList()
-            })
-            .OrderByDescending(day => day.Date)
-            .ToListAsync();
-    }
+            };
 
-    public async Task<IActionResult> OnGet()
-    {
-        await PopulatePage();
+        TotalPages = (await allNotes.CountAsync() + NotesPerPage - 1) / NotesPerPage;
+
+        Items = await allNotes
+            .Skip(NotesPerPage * (CurrentPage - 1))
+            .Take(NotesPerPage)
+            .ToListAsync();
+
         return Page();
     }
 }

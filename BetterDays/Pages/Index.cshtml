@@ -17,6 +17,8 @@
     </p>
 </div>
 
+<partial model="Model" name="Shared/_PaginationPartial"/>
+
 @foreach (var day in Model.Items)
 {
     var isWeekend = day.Date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday;
@@ -65,6 +67,8 @@
         </div>
     </div>
 }
+
+<partial model="Model" name="Shared/_PaginationPartial"/>
 
 @functions
 {
