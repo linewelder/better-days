@@ -89,7 +89,7 @@ public class CreateNote(ApplicationDbContext context, UserManager<IdentityUser> 
             Comment = NewNote.Comment?.Trim(),
             Productivity = NewNote.Productivity,
             Mood = NewNote.Mood,
-            Deeds = NewNote.DoneDeedIds?
+            Deeds = (NewNote.DoneDeedIds ?? [])
                 .Select(id => new DoneDeed { DeedId = id })
                 .ToList()
         };
