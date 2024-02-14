@@ -69,7 +69,7 @@ public static class DbSeeder
             "mollit anim id est laborum."
         ];
 
-        var startingDate = new DateOnly(2024, 1, 24);
+        var startingDate = new DateOnly(2024, 2, 5);
         for (var i = 0; i < 10; i++)
         {
             var deeds = new List<DoneDeed>();
