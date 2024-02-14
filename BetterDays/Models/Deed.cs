@@ -12,4 +12,6 @@ public class Deed
 
     [Required, MaxLength(20)]
     public required string Name { get; set; }
+
+    public ICollection<DoneDeed>? Dates { get; set; }
 }

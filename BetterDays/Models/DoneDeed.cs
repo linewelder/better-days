@@ -9,4 +9,5 @@ public class DoneDeed
     public int DeedId { get; set; }
 
     public Deed? Deed { get; set; }
+    public DailyNote? DailyNote { get; set; }
 }
