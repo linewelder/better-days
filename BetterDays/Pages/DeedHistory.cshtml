@@ -4,26 +4,28 @@
     ViewData["Title"] = "Deed History";
 }
 
-<div class="row row-cols-auto g-2 justify-content-evenly">
+<div class="mx-auto row row-cols-1 row-cols-lg-2 row-cols-xxl-3 g-3 g-xxl-5 justify-content-start">
     @foreach (var deed in Model.Deeds)
     {
         <div class="col">
             <div class="card">
                 <div class="card-body">
                     <h3 class="card-title">@deed.Name</h3>
-                    <div class="row g-1">
+                    <div class="row justify-content-center g-1 gx-md-2">
                         @for (var index = 0; index < DaysOfWeek.Length; index++)
                         {
                             var isWeekend = index >= 5;
-                            <div class="col text-center p-2 fw-bold @(isWeekend ? "text-danger" : "")">
-                                @DaysOfWeek[index]
+                            <div class="col-auto fw-bold @(isWeekend ? "text-danger" : "")">
+                                <div class="pt-2 text-center calendar-day">
+                                    @DaysOfWeek[index]
+                                </div>
                             </div>
                         }
                     </div>
 
                     @for (var currentDate = Model.RangeStart; currentDate <= Model.RangeEnd;)
                     {
-                        <div class="row g-1">
+                        <div class="row justify-content-center g-1 gx-md-2 mb-1">
                             @for (var i = 0; i < 7; i++)
                             {
                                 @if (currentDate <= Model.RangeEnd)
@@ -36,17 +38,15 @@
                                         isHighlighted ? "bg-info" : "",
                                         isToday ? "border border-2 border-danger" : "",
                                         isWeekend && !isHighlighted ? "text-secondary" : "");
-                                    <div class="col text-center">
-                                        <div class="p-2 rounded-circle @conditionalClasses"
-                                             style="width: 41px; height: 41px;">
+                                    <div class="col-auto">
+                                        <div class="p-2 text-center rounded-circle calendar-day @conditionalClasses">
                                             @(currentDate.Day)
                                         </div>
                                     </div>
                                 }
                                 else
                                 {
-                                    <div class="col">
-                                        <div class="p-2" style="width: 41px; height: 41px;"></div></div>
+                                    <div class="col-auto"><div class="p-2 calendar-day"></div></div>
                                 }
 
                                 currentDate = currentDate.AddDays(1);

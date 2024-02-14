@@ -36,3 +36,8 @@ a.navbar-brand {
   width: 100px;
   display: inline-block;
 }
+
+.calendar-day {
+  width: 41px;
+  height: 41px;
+}
