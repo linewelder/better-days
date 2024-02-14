@@ -91,6 +91,12 @@ public class EditNote(ApplicationDbContext context, UserManager<IdentityUser> us
 
     public async Task<IActionResult> OnPost(string date)
     {
+        if (!ModelState.IsValid)
+        {
+            await PopulatePage();
+            return Page();
+        }
+
         if (!DateOnly.TryParse(date, out var parsedDate))
         {
             return NotFound();

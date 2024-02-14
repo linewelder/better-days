@@ -69,15 +69,17 @@ public class CreateNote(ApplicationDbContext context, UserManager<IdentityUser> 
 
     public async Task<IActionResult> OnPost()
     {
+        if (!ModelState.IsValid)
+        {
+            await PopulatePage();
+            return Page();
+        }
+
         var userId = userManager.GetUserId(User)!;
         var date = NewNote.Date;
         if (await context.DailyNotes.AnyAsync(dn => dn.UserId == userId &&  dn.Date == date))
         {
             ModelState.AddModelError("", "There already is a note for today");
-        }
-
-        if (!ModelState.IsValid)
-        {
             await PopulatePage();
             return Page();
         }
