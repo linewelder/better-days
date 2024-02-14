@@ -74,4 +74,6 @@
             dateInput.val(formatLocalDateForInput(getPerceivedToday()));
         }
     </script>
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
