@@ -1,0 +1,62 @@
+@page "{id:int}"
+@model BetterDays.Pages.DeedHistory
+@{
+    ViewData["Title"] = $"History of {Model.DeedName}";
+
+    var today = DateOnly.FromDateTime(DateTime.Today);
+    var rangeStart = today.AddDays(-7 * 4);
+    var firstWeekStart = rangeStart.AddDays(-(((int)rangeStart.DayOfWeek - 1) % 7));
+    var currentDate = firstWeekStart;
+}
+
+<div class="d-flex justify-content-center">
+    <div>
+        <h1>@Model.DeedName</h1>
+
+        <div class="row g-1">
+            @for (var index = 0; index < DaysOfWeek.Length; index++)
+            {
+                var isWeekend = index >= 5;
+                <div class="col text-center p-2 fw-bold @(isWeekend ? "text-danger" : "")">
+                    @DaysOfWeek[index]
+                </div>
+            }
+        </div>
+
+        @while (currentDate <= today)
+        {
+            <div class="row g-1">
+                @for (var i = 0; i < 7; i++)
+                {
+                    @if (currentDate <= today)
+                    {
+                        var isHighlighted = Model.HighlightedDays.Contains(currentDate);
+                        var isToday = currentDate == today;
+                        var isWeekend = currentDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday;
+
+                        var conditionalClasses = string.Join(" ",
+                            isHighlighted ? "bg-info" : "",
+                            isToday ? "border border-2 border-danger" : "",
+                            isWeekend && !isHighlighted ? "text-secondary" : "");
+                        <div class="col text-center">
+                            <div class="p-2 rounded-circle @conditionalClasses" style="width: 41px; height: 41px;">
+                                @(currentDate.Day)
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col"><div class="p-2" style="width: 41px; height: 41px;"></div></div>
+                    }
+
+                    currentDate = currentDate.AddDays(1);
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@functions
+{
+    private static readonly string[] DaysOfWeek = new[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+}
