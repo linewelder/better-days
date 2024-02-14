@@ -6,11 +6,8 @@
 }
 
 <div class="text-center">
-    <h1>Today is @Utils.PerceivedToday.ToString("dddd, d MMM yyyy")</h1>
-    @if (Utils.PerceivedToday != DateOnly.FromDateTime(DateTime.Now))
-    {
-        <p class="text-secondary">(After midnight)</p>
-    }
+    <h1 id="greeting">Hello!</h1>
+    <p id="greeting-remark" class="text-secondary"></p>
 
     <p>
         <a class="btn btn-primary" asp-page="CreateNote">How Was Your Day?</a>
@@ -75,6 +72,17 @@
 else
 {
     <p class="lead text-center">Nothing Here Yet</p>
+}
+
+@section Scripts
+{
+    <script>
+        const perceivedToday = getPerceivedToday();
+        $('#greeting').text(`Today is ${formatDate(perceivedToday)}`);
+        if (perceivedToday.getDate() !== new Date().getDate()) {
+            $('#greeting-remark').text('(After midnight)');
+        }
+    </script>
 }
 
 @functions
