@@ -19,17 +19,17 @@ public class CreateDeed(ApplicationDbContext context, UserManager<IdentityUser> 
 
     public async Task<IActionResult> OnPost()
     {
+        if (!ModelState.IsValid)
+        {
+            return Page();
+        }
+
         var userId = userManager.GetUserId(User)!;
 
         var nameTrimmed = NewDeed.Trim();
         if (await context.Deeds.AnyAsync(d => d.Name == nameTrimmed))
         {
             ModelState.AddModelError(nameof(NewDeed), "Name must be unique");
-        }
-
-        if (!ModelState.IsValid)
-        {
-            return Page();
         }
 
         var newDeed = new Deed
