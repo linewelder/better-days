@@ -1,29 +1,56 @@
 using BetterDays.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace BetterDays.Pages;
 
-public class DeedHistory(ApplicationDbContext context) : PageModel
+public class DeedHistory(ApplicationDbContext context, UserManager<IdentityUser> userManager) : PageModel
 {
-    public string DeedName { get; set; } = null!;
-    public List<DateOnly> HighlightedDays { get; set; } = null!;
-
-    public async Task<IActionResult> OnGet(int id)
+    public class DeedInfo
     {
-        var deed = await context.Deeds.FindAsync(id);
-        if (deed is null)
-        {
-            return NotFound();
-        }
-        DeedName = deed.Name;
+        public required string Name { get; set; }
+        public required List<DateOnly> HighlightedDays { get; set; }
+    }
 
-        HighlightedDays = await context.DailyNotes
-            .Where(dn => dn.Deeds!.Any(dd => dd.DeedId == id))
-            .Select(dn => dn.Date)
-            .ToListAsync();
+    private const int WeeksShown = 4;
 
+    /// <summary>
+    /// Must be on Monday.
+    /// </summary>
+    public DateOnly RangeStart { get; set; }
+    public DateOnly RangeEnd { get; set; }
+    public DateOnly Today { get; set; }
+
+    public List<DeedInfo> Deeds { get; set; } = null!;
+
+    public async Task<IActionResult> OnGet()
+    {
+        Today = DateOnly.FromDateTime(DateTime.Today);
+
+        var rangeStart = Today.AddDays(-7 * WeeksShown);
+        var firstWeekStart = rangeStart.AddDays(-(((int)rangeStart.DayOfWeek - 1) % 7));
+
+        RangeStart = firstWeekStart;
+        RangeEnd = Today;
+
+        var userId = userManager.GetUserId(User)!;
+        var query =
+            from deed in context.Deeds
+            where deed.UserId == userId
+            select new DeedInfo
+            {
+                Name = deed.Name,
+                HighlightedDays =
+                    (from doneDeed in deed.Dates
+                    let date = doneDeed.DailyNote.Date
+                    where RangeStart <= date && date <= RangeEnd
+                    orderby date
+                    select date).ToList()
+            };
+
+        Deeds = await query.ToListAsync();
         return Page();
     }
 }
