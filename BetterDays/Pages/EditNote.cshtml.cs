@@ -82,7 +82,8 @@ public class EditNote(ApplicationDbContext context, UserManager<IdentityUser> us
             }
 
             ModelState.AddModelError(
-                "Note.DoneDeedIds", $"Deed with ID {doneDeed.DeedId} does not belong to the user");
+                $"{nameof(Note)}.{nameof(Note.DoneDeedIds)}",
+                $"Deed with ID {doneDeed.DeedId} does not belong to the user");
             return false;
         }
 
@@ -118,7 +119,7 @@ public class EditNote(ApplicationDbContext context, UserManager<IdentityUser> us
         note.Deeds = (Note.DoneDeedIds ?? [])
             .Select(id => new DoneDeed { DeedId = id })
             .ToList();
-        if (!TryValidateModel(note))
+        if (!TryValidateModel(note, nameof(Note)))
         {
             await PopulatePage();
             return Page();

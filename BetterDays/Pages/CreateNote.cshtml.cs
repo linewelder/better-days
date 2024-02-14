@@ -60,7 +60,8 @@ public class CreateNote(ApplicationDbContext context, UserManager<IdentityUser> 
             }
 
             ModelState.AddModelError(
-                "Note.DoneDeedIds", $"Deed with ID {doneDeed.DeedId} does not belong to the user");
+                $"{nameof(NewNote)}.{nameof(NewNote.DoneDeedIds)}",
+                $"Deed with ID {doneDeed.DeedId} does not belong to the user");
             return false;
         }
 
@@ -79,7 +80,9 @@ public class CreateNote(ApplicationDbContext context, UserManager<IdentityUser> 
         var date = NewNote.Date;
         if (await context.DailyNotes.AnyAsync(dn => dn.UserId == userId &&  dn.Date == date))
         {
-            ModelState.AddModelError("", "There already is a note for today");
+            ModelState.AddModelError(
+                $"{nameof(NewNote)}.{nameof(NewNote.Date)}",
+                "There already is a note for this date");
             await PopulatePage();
             return Page();
         }
@@ -95,7 +98,7 @@ public class CreateNote(ApplicationDbContext context, UserManager<IdentityUser> 
                 .Select(id => new DoneDeed { DeedId = id })
                 .ToList()
         };
-        if (!TryValidateModel(newNote))
+        if (!TryValidateModel(newNote, nameof(NewNote)))
         {
             await PopulatePage();
             return Page();
