@@ -69,6 +69,9 @@
             return `${year}-${month}-${day}`;
         }
 
-        $('#NewNote_Date').val(formatLocalDateForInput(getPerceivedToday()));
+        const dateInput = $('#NewNote_Date');
+        if (!dateInput.val()) {
+            dateInput.val(formatLocalDateForInput(getPerceivedToday()));
+        }
     </script>
 }
