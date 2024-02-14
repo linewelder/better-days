@@ -59,14 +59,16 @@
     <button type="submit" class="btn btn-primary">Add Note</button>
 </form>
 
-<script>
-    function getLocalDate(date) {
-        const year = date.getFullYear();
-        const month = ('0' + (date.getMonth() + 1)).slice(-2);
-        const day = ('0' + date.getDate()).slice(-2);
-        return `${year}-${month}-${day}`;
-    }
+@section Scripts
+{
+    <script>
+        function getLocalDate(date) {
+            const year = date.getFullYear();
+            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+            const day = ('0' + date.getDate()).slice(-2);
+            return `${year}-${month}-${day}`;
+        }
 
-    const dateInput = document.getElementById('NewNote_Date');
-    dateInput.value = getLocalDate(getPerceivedToday());
-</script>
+        $('#NewNote_Date').val(getLocalDate(getPerceivedToday()));
+    </script>
+}
