@@ -54,6 +54,16 @@
                         </div>
                     }
                 </div>
+                <div class="card-footer text-end">
+                    @if (deed.Frequency is not null)
+                    {
+                        <text>~Every @deed.Frequency?.ToString("N1") days</text>
+                    }
+                    else
+                    {
+                        <text>Nothing yet</text>
+                    }
+                </div>
             </div>
         </div>
     }

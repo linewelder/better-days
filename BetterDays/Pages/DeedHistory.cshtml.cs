@@ -12,6 +12,7 @@ public class DeedHistory(ApplicationDbContext context, UserManager<IdentityUser>
     {
         public required string Name { get; set; }
         public required List<DateOnly> HighlightedDays { get; set; }
+        public double? Frequency { get; set; }
     }
 
     private const int WeeksShown = 4;
@@ -51,6 +52,12 @@ public class DeedHistory(ApplicationDbContext context, UserManager<IdentityUser>
             };
 
         Deeds = await query.ToListAsync();
+        foreach (var deed in Deeds.Where(deed => deed.HighlightedDays.Count > 0))
+        {
+            var countedRange = RangeEnd.DayNumber - deed.HighlightedDays[0].DayNumber + 1;
+            deed.Frequency = (double)countedRange / deed.HighlightedDays.Count;
+        }
+
         return Page();
     }
 }
