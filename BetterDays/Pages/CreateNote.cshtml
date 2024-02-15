@@ -70,7 +70,7 @@
         }
 
         const dateInput = $('#NewNote_Date');
-        if (!dateInput.val()) {
+        if (dateInput.val() === '0001-01-01') {
             dateInput.val(formatLocalDateForInput(getPerceivedToday()));
         }
     </script>
